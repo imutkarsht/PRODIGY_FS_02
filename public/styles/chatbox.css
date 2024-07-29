@@ -22,8 +22,8 @@
 }
 
 #messageBox {
-    max-height: 60vh; /* Adjust as needed */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 60vh; 
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -31,33 +31,61 @@
 
 .message {
     padding: 0.5rem;
-    background-color: #fff; /* Default color for received messages */
+    background-color: #fff;
     border-radius: 0.5rem;
-    box-shadow: -2px 3px 2px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: -px 3px 2px 0px rgba(0, 0, 0, 0.2);
     max-width: 60%;
     margin: 0.5rem;
-    align-self: flex-start; /* Default to left */
+    align-self: flex-start; 
 }
 
 .message.sent {
-    background-color: #f75353; /* Tailwind red-400 */
-    color: #ffffff; /* White text color */
+    background-color: #f75353;
+    color: #ffffff;
     align-self: flex-end;
 }
 
 .message-header {
-    font-size: 0.875rem; /* Tailwind text-sm */
-    font-weight: 600; /* Tailwind font-semibold */
-    color: #000000; /* Tailwind gray-700 */
+    font-size: 0.875rem; 
+    font-weight: 600;
+    color: #000000; 
 }
 .message-header .sent{
     color: white;
 }
 
 .message-body {
-    color: #111827; /* Tailwind gray-900 */
+    color: #111827; 
 }
 
 .message.sent .message-body {
-    color: #ffffff; /* White text color for sent messages */
+    color: #ffffff; 
+}
+
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f0f0f0; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ff6f61; 
+    border-radius: 6px; 
+    border: 3px solid #f0f0f0; 
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ff3b30; 
+}
+
+
+::-webkit-scrollbar-track {
+    background-color: #e0e0e0; 
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
