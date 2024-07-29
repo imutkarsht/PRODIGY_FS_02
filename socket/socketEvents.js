@@ -1,4 +1,6 @@
 const Message = require('../models/messageModel');
+const Filter = require('bad-words');
+const filter = new Filter();
 
 module.exports = function(io) {
     io.on('connection', (socket) => {
@@ -12,8 +14,11 @@ module.exports = function(io) {
 
         socket.on('chat message', async (msg) => {
             const { userId, message } = msg;
+
+            const filteredMessage = filter.clean(message)
+
             const newMessage = new Message({
-                data: message,
+                data: filteredMessage,
                 sender: userId
             });
             
@@ -24,7 +29,7 @@ module.exports = function(io) {
             }
             const response = {
                 from: userId,
-                message: message,
+                message: filteredMessage,
                 sentAt: newMessage.sentAt
             };
 

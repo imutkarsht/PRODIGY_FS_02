@@ -22,11 +22,15 @@
     </nav>
     
     <div class="fixed top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-lg md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-900">
-        <div class="flex gap-2 bg-zinc-500 shadow-md shadow-red-300 bg-opacity-15 text-black items-center py-3 px-4 text-xl font-semibold">
-            <i class='bx bxs-chat text-2xl text-red-500'></i>
-           <h3>Chat Room</h3>
+        <div class="flex justify-between bg-zinc-500 shadow-md shadow-red-300 bg-opacity-15 text-black items-center py-3 px-4 text-xl font-semibold">
+            <div class="flex gap-2 items-center">
+                <i class='bx bxs-chat text-2xl text-red-500'></i>
+                <h3>Chat Room</h3>
+            </div>
+            <a href="/logout">
+                <button><i class='bx bx-log-out text-3xl bg-red-500 p-1 text-zinc-200 font-semibold rounded-md shadow-md shadow-zinc-400'></i></button>
+            </a>
         </div>
-        <!-- <div class="h-0.5 bg-red-500 w-full"></div> -->
         <ul id="messageBox" class="p-4 overflow-y-auto space-y-2">
             <% if (response[1].length === 0) { %>
                 <li class="text-center text-gray-900"></li>

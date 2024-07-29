@@ -56,8 +56,28 @@ const handlePostChats = async (req, res) => {
     }
 }
 
+const handleLeaveRoom = async (req, res) => {
+    const username = req.cookies.username;
+
+    if (username) {
+        try {
+            await ActiveUsers.deleteOne({ username: username });
+
+            res.cookie('username', '',{ expires: new Date(0), httpOnly: true });
+
+            res.redirect('/?message=you%20left%20the%20room');
+        } catch (error) {
+            console.error('Error handling leave room:', error);
+            res.redirect('/?message=something%20went%20wrong');
+        }
+    } else {
+        res.redirect('/');
+    }
+};
+
 module.exports = {
     handleGetHome,
     handleGetChat,
-    handlePostChats
+    handlePostChats,
+    handleLeaveRoom
 }
