@@ -3,29 +3,22 @@ const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const db = require('./config/db');
 const chatRoutes = require('./routes/chatRoutes');
 const socketEvents = require('./socket/socketEvents');
-const cron = require('node-cron')
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
-const Message = require('./models/messageModel');
+
+require('./config/cron');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 app.use('/', chatRoutes);
-
-cron.schedule('*/5 * * * *', async () => {
-    try {
-        await Message.deleteMany({});
-        console.log('Database cleared');
-    } catch (error) {
-        console.error('Error clearing database:', error);
-    }
-});
 
 socketEvents(io);
 

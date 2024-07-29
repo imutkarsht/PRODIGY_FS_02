@@ -26,7 +26,7 @@
         </div>
         <ul id="messageBox" class="p-4 overflow-y-auto space-y-2">
             <% if (response[1].length === 0) { %>
-                <li class="text-center text-gray-900">No messages yet...</li>
+                <li class="text-center text-gray-900"></li>
             <% } else { %>
                 <% response[1].forEach(message => { %>
                     <li class="message <%= message.sender === response[0] ? 'sent' : '' %>">

@@ -34,10 +34,22 @@
                     Join Chat
                 </button>
             </form>
+            <p id="msgbox" class="text-red-500"></p>
         </div>
         <div class="p-4 md:w-1/2 w-full flex justify-end">
             <img src="/images/banner.png" alt="banner">
         </div>
     </div>
+    <script>
+        window.addEventListener('load', () => {
+            const msgbox = document.getElementById('msgbox')
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            if (message) {
+                msgbox.innerHTML = decodeURIComponent(message);
+                setTimeout(() => msgbox.innerHTML = '', 1500)
+            }
+        });
+    </script>
 </body>
 </html>
