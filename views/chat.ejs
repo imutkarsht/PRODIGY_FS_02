@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real time chat app</title>
+    <link rel="stylesheet" href="styles/output.css">
+    <link rel="stylesheet" href="styles/chatbox.css">
+</head>
+<body class="bg-white text-black w-full">
+    <div class="background-container">
+        <img src="images/chat.jpg" alt="banner">
+        <div class="overlay"></div>
+    </div>
+    <nav class="absolute z-40 top-0 left-0 w-full bg-red-500 flex items-center justify-between p-3 text-3xl text-white font-semibold">
+        <a href="/"><h1>Chatify</h1></a>
+        <ul class="flex gap-4 pl-4 text-xl">
+            <li>Join us</li>
+            <li>Chat Rooms</li>
+        </ul>
+    </nav>
+    
+    <div class="fixed top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-lg md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200">
+        <div class="bg-red-500 text-white py-3 px-4 text-xl font-semibold">
+            Chat Room
+        </div>
+        <ul id="messageBox" class="p-4 overflow-y-auto space-y-2">
+            <% if (response[1].length === 0) { %>
+                <li class="text-center text-gray-900">No messages yet...</li>
+            <% } else { %>
+                <% response[1].forEach(message => { %>
+                    <li class="message <%= message.sender === response[0] ? 'sent' : '' %>">
+                        <h3 class="message-header"><%= message.sender %></h3>
+                        <p class="message-body text-base"><%= message.data %></p>
+                        <p class="text-xs flex w-full justify-end"><%= message.sentAt %></p>
+                    </li>
+                <% }) %>
+            <% } %>
+        </ul>
+        <form class="p-2 flex items-center">
+            <input type="text" placeholder="Enter your message" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition duration-300 ease-in-out">
+            <button type="submit" class="ml-3 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ease-in-out">
+                Send
+            </button>
+        </form>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const userId = "<%= response[0]%>";
+
+        socket.emit('user connected', userId);
+
+        const form = document.querySelector('form');
+        const input = document.querySelector('input');
+        const msgBox = document.getElementById('messageBox');
+
+        socket.on('chat message', (msg) => {
+            const item = document.createElement('li');
+            item.classList.add('message');
+            if (msg.from === userId) {
+                item.classList.add('sent');
+            }
+            item.innerHTML = `
+                <h3 class="message-header">${msg.from}</h3>
+                <p class="message-body">${msg.message}</p>
+                <p class="text-xs flex w-full justify-end">${msg.sentAt}</p>
+            `;
+            msgBox.appendChild(item);
+            msgBox.scrollTop = msgBox.scrollHeight; 
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value) {
+                const messageBody = {
+                    message: input.value,
+                    userId: userId
+                };
+                socket.emit('chat message', messageBody);
+                input.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

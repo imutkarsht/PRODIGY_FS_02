@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat app</title>
+    <link rel="stylesheet" href="/styles/output.css">
+</head>
+<body class="bg-white text-black min-h-[100vh] w-full">
+    <nav class="bg-red-500 flex items-center justify-between p-3 text-3xl text-white font-semibold">
+        <h1>Chatify</h1>
+        <ul class="flex gap-4 pl-4 text-xl">
+            <li>Join us</li>
+            <li>Chat Rooms</li>
+        </ul>
+    </nav>
+    <div class="flex w-full flex-wrap-reverse items-center mt-[2vh] p-8 justify-between">
+        <div class="md:w-1/2 w-full">
+            <h1 class="md:text-7xl text-4xl mb-[3vh] font-bold text-zinc-950">Join the fun of chat!</h1>
+            <p class="md:text-lg text-base md:pr-20 pr-0 font-semibold text-zinc-600">
+                Chatify is a cutting-edge real-time chat application developed using Node.js, MongoDB, Socket.io, and Tailwind CSS. Our platform allows users to engage in anonymous conversations with others on the server seamlessly. Experience instant messaging with no delays, Chatify ensures your privacy and security. Simply enter your desired username to join the chat and start engaging with others. We encourage a respectful and inclusive environment for all users. Enjoy Chatify and happy chatting!
+            </p>
+            <form action="/chat" method="post" class="flex flex-col items-center gap-4 mt-8 md:flex-row">
+                <input 
+                    type="text" 
+                    name="username"
+                    placeholder="Pick a username" 
+                    class="py-3 px-4 text-lg rounded-md border border-gray-300 focus:outline-none focus:border-2 focus:border-red-500 transition duration-300 ease-in-out shadow-sm w-full md:w-auto"
+                >
+                <button 
+                    type="submit" 
+                    class="py-3 px-6 rounded-md bg-red-500 text-lg font-semibold text-white hover:bg-red-600 transition duration-300 ease-in-out shadow-md w-full md:w-auto"
+                >
+                    Join Chat
+                </button>
+            </form>
+        </div>
+        <div class="p-4 md:w-1/2 w-full flex justify-end">
+            <img src="/images/banner.png" alt="banner">
+        </div>
+    </div>
+</body>
+</html>

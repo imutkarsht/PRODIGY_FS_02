@@ -1,14 +1,25 @@
-require('dotenv').config()
-const express = require('express')
-const { createServer } = require('http')
+require('dotenv').config();
+const express = require('express');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
+const db = require('./config/db');
+const chatRoutes = require('./routes/chatRoutes');
+const socketEvents = require('./socket/socketEvents');
 
-const app = express()
-const server = createServer(app)
+const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
-app.get('/', (req, res) => {
-    res.send('<h1>Hello world</h1>');
-  });
-  
-server.listen(process.env.PORT, () => {
-console.log(`server running at port ${process.env.PORT}`);
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', chatRoutes);
+
+socketEvents(io);
+
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+    console.log(`Server running at port ${port}`);
 });
