@@ -10,6 +10,7 @@ const cron = require('node-cron')
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+const Message = require('./models/messageModel');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
