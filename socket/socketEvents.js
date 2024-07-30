@@ -27,6 +27,11 @@ module.exports = function(io) {
                 return;
             }
 
+            const emojiOnlyRegex = /^[\p{Emoji}\s]+$/u;
+            if (emojiOnlyRegex.test(trimmedMessage)) {
+                return;
+            }
+
             const filteredMessage = filter.clean(trimmedMessage);
             const newMessage = new Message({
                 data: filteredMessage,
