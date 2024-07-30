@@ -8,7 +8,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 1.0;
+    opacity: 1;
 }
 
 .overlay {
@@ -17,7 +17,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
 
@@ -33,7 +33,7 @@
     padding: 0.5rem;
     background-color: #fff;
     border-radius: 0.5rem;
-    box-shadow: -px 3px 2px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: -1px 3px 2px 0px rgba(0, 0, 0, 0.2);
     max-width: 60%;
     margin: 0.5rem;
     align-self: flex-start; 
@@ -46,7 +46,7 @@
 }
 
 .message-header {
-    font-size: 0.875rem; 
+    font-size: 0.8rem; 
     font-weight: 600;
     color: #000000; 
 }
