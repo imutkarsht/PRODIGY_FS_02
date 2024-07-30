@@ -21,7 +21,13 @@ module.exports = function(io) {
 
         socket.on('chat message', async (msg) => {
             const { userId, message } = msg;
-            const filteredMessage = filter.clean(message);
+            const trimmedMessage = message.trim();
+            
+            if (!trimmedMessage) {
+                return;
+            }
+
+            const filteredMessage = filter.clean(trimmedMessage);
             const newMessage = new Message({
                 data: filteredMessage,
                 sender: userId
