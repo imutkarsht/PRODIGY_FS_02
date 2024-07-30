@@ -8,7 +8,12 @@ const chatRoomSchema = new mongoose.Schema({
     topic: {
         type: String,
         required: true
-    }
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ActiveUser',
+        required: true
+    },
 })
 
 const ChatRoom = mongoose.model('ChatRoom', chatRoomSchema)

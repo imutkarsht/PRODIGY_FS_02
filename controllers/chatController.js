@@ -1,5 +1,6 @@
 const Message = require('../models/messageModel');
-const ActiveUsers = require('../models/activeUsersModel')
+const ActiveUsers = require('../models/activeUsersModel');
+const ChatRoom = require('../models/chatRoomModel');
 
 const handleGetHome = (req, res) => {
     const username = req.cookies.username;
@@ -62,10 +63,14 @@ const handleLeaveRoom = async (req, res) => {
 
     if (username) {
         try {
-            await ActiveUsers.deleteOne({ username: username });
+            const user = await ActiveUsers.findOne({ username: username });
+            
+            if (user) {
+                await ActiveUsers.deleteOne({ username: username });
+                await ChatRoom.deleteMany({ createdBy: user._id });
+            }
 
-            res.cookie('username', '',{ expires: new Date(0), httpOnly: true });
-
+            res.cookie('username', '', { expires: new Date(0), httpOnly: true });
             res.redirect('/?message=you%20left%20the%20room');
         } catch (error) {
             console.error('Error handling leave room:', error);

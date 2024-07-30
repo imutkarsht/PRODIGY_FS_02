@@ -12,6 +12,10 @@ const messageSchema = new mongoose.Schema({
     },
     sentAt: {
         type: String
+    },
+    belongsTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatRoom'
     }
 }, { timestamps: true });
 
