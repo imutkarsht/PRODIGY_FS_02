@@ -30,10 +30,11 @@ const handlePostChats = async (req, res) => {
         return res.redirect('/?message=Username%20already%20taken');
     }
     
-    if (username.length < 4 || /[^a-zA-Z0-9]/.test(username)) {
-        res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only');
+    if (username.length < 4 || /[^a-zA-Z0-9_$]/.test(username)) {
+        res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)');
         return;
     }
+    
 
     try {
         await new ActiveUsers({

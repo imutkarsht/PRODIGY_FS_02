@@ -44,10 +44,11 @@
                 <% }) %>
             <% } %>
         </ul>
+        <div id="typingIndicator" class="hidden text-gray-500 text-sm px-4 py-2"></div>
         <form class="p-2 flex items-center">
             <input type="text" placeholder="Enter your message" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition duration-300 ease-in-out">
-            <button type="submit" class="ml-3 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ease-in-out">
-                Send
+            <button type="submit" class="">
+                <i class='bx bxs-send ml-3 p-2 shadow-lg shadow-zinc-700 text-3xl bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300 ease-in-out'></i>
             </button>
         </form>
     </div>
@@ -62,6 +63,8 @@
         const form = document.querySelector('form');
         const input = document.querySelector('input');
         const msgBox = document.getElementById('messageBox');
+        const typingIndicator = document.getElementById('typingIndicator');
+        let typingTimeout;
 
         socket.on('chat message', (msg) => {
             const item = document.createElement('li');
@@ -75,7 +78,32 @@
                 <p class="text-xs flex w-full justify-end">${msg.sentAt}</p>
             `;
             msgBox.appendChild(item);
-            msgBox.scrollTop = msgBox.scrollHeight; 
+            msgBox.scrollTop = msgBox.scrollHeight;
+        });
+
+        socket.on('user join', (response) => {
+            const item = document.createElement('li');
+            item.classList.add('connect');
+            item.innerHTML = `<p>${response.message}</p>`;
+            msgBox.appendChild(item);
+            msgBox.scrollTop = msgBox.scrollHeight;
+        });
+
+        socket.on('user left', (response) => {
+            const item = document.createElement('li');
+            item.classList.add('disconnect');
+            item.innerHTML = `<p>${response.message}</p>`;
+            msgBox.appendChild(item);
+            msgBox.scrollTop = msgBox.scrollHeight;
+        });
+
+        socket.on('typing', (userId) => {
+            typingIndicator.textContent = `${userId} is typing...`;
+            typingIndicator.classList.remove('hidden');
+        });
+
+        socket.on('stop typing', () => {
+            typingIndicator.classList.add('hidden');
         });
 
         form.addEventListener('submit', (e) => {
@@ -86,8 +114,17 @@
                     userId: userId
                 };
                 socket.emit('chat message', messageBody);
+                socket.emit('stop typing', userId);
                 input.value = '';
             }
+        });
+
+        input.addEventListener('input', () => {
+            socket.emit('typing', userId);
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                socket.emit('stop typing', userId);
+            }, 3000);
         });
     </script>
 </body>
