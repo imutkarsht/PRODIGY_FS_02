@@ -14,12 +14,15 @@
         <div class="overlay"></div>
     </div>    
     <div class="fixed top-0 md:top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-md md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-700">
-        <div class="flex justify-between bg-red-500 shadow-md shadow-zinc-800 text-black items-center py-3 px-4 text-xl font-semibold">
+        <div class="flex justify-between relative bg-red-500 shadow-md shadow-zinc-800 text-black items-center py-3 px-4 text-xl font-semibold">
             <div class="flex gap-2 items-center">
                 <i class='bx bxs-chat text-2xl text-white'></i>
                 <h3 id="roomVal" class="text-white font-semibold"></h3>
             </div>
-            <p class="self-center text-white text-base font-semibold" id="userCount">Online: 0</p>
+            <button class="self-center text-white text-base font-semibold" id="userCount">Online: 0</button>
+            <ul id="activeUserList" class="absolute hidden left-[35%] top-[9.5vh] backdrop-blur-md px-0 py-0 text-lg font-semibold text-zinc-700 w-[20vw] shadow-sm shadow-zinc-500 flex-col items-center justify-center rounded-b-md">
+                <!-- Active users will be dynamically added here -->
+            </ul>
             <a href="/logout">
                 <button id="logoutBtn"><i class='bx bx-log-out text-3xl bg-red-500 p-1 text-white font-semibold rounded-md border border-white'></i></button>
             </a>
@@ -54,6 +57,7 @@
         localStorage.setItem('roomName', roomName);
 
         const userCountElement = document.getElementById('userCount');
+        const activeUserList = document.getElementById('activeUserList');
     
         const socket = io();
     
@@ -99,6 +103,16 @@
         socket.on('update user count', ({ userCount }) => {
             userCountElement.textContent = `Online: ${userCount}`;
         });
+
+        socket.on('update active users', ({ users }) => {
+            activeUserList.innerHTML = '';
+            users.forEach(user => {
+                const item = document.createElement('li');
+                item.classList.add('shadow-inner', 'shadow-zinc-300', 'w-full', 'text-center');
+                item.textContent = user;
+                activeUserList.appendChild(item);
+            });
+        });
     
         socket.on('typing', (userId) => {
             typingIndicator.textContent = `${userId} is typing...`;
@@ -131,6 +145,18 @@
         });
 
         document.getElementById('logoutBtn').addEventListener('click', () => localStorage.removeItem('roomName'))
+
+        userCountElement.addEventListener('click', () => {
+            if(activeUserList.classList.contains('flex')){
+                activeUserList.classList.remove('flex')
+                activeUserList.classList.add('hidden')
+            }
+            else{
+                activeUserList.classList.remove('hidden')
+                activeUserList.classList.add('flex')
+            }
+        });
+
     </script>
 </body>
 </html>

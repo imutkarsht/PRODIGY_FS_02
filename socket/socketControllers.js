@@ -17,7 +17,9 @@ const handleUserConnected = (io, socket, { userId, roomName }) => {
     const message = `${userId} joined the room ${roomName}`;
     io.to(roomName).emit('user join', { message });
     io.to(roomName).emit('update user count', { userCount: usersInRoom[roomName].size });
+    io.to(roomName).emit('update active users', { users: Array.from(usersInRoom[roomName]) });
 };
+
 
 const handleDisconnect = (io, socket) => {
     if (socket.userId && socket.roomName) {
@@ -25,6 +27,7 @@ const handleDisconnect = (io, socket) => {
         const message = `${socket.userId} left the room`;
         io.to(socket.roomName).emit('user left', { message });
         io.to(socket.roomName).emit('update user count', { userCount: usersInRoom[socket.roomName].size });
+        io.to(socket.roomName).emit('update active users', { users: Array.from(usersInRoom[socket.roomName]) });
 
         if (usersInRoom[socket.roomName].size === 0) {
             delete usersInRoom[socket.roomName];
