@@ -12,25 +12,16 @@
     <div class="background-container">
         <img src="/images/chat.jpg" alt="banner">
         <div class="overlay"></div>
-    </div>
-    <nav class="absolute z-40 top-0 left-0 w-full bg-red-500 flex items-center justify-between p-3 text-3xl text-white font-semibold">
-        <a href="/"><h1>Chatify</h1></a>
-        <ul class="flex gap-4 pl-4 text-xl">
-            <li>Join us</li>
-            <a href="/room">
-                <li>Chat Rooms</li>
-            </a>
-        </ul>
-    </nav>
-    
-    <div class="fixed top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-md md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-700">
-        <div class="flex justify-between bg-zinc-500 shadow-md shadow-red-300 bg-opacity-15 text-black items-center py-3 px-4 text-xl font-semibold">
+    </div>    
+    <div class="fixed top-0 md:top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-md md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-700">
+        <div class="flex justify-between bg-red-500 shadow-md shadow-zinc-800 text-black items-center py-3 px-4 text-xl font-semibold">
             <div class="flex gap-2 items-center">
-                <i class='bx bxs-chat text-2xl text-red-500'></i>
-                <h3 id="roomVal"></h3>
+                <i class='bx bxs-chat text-2xl text-white'></i>
+                <h3 id="roomVal" class="text-white font-semibold"></h3>
             </div>
+            <p class="self-center text-white text-base font-semibold" id="userCount">Online: 0</p>
             <a href="/logout">
-                <button id="logoutBtn"><i class='bx bx-log-out text-3xl bg-red-500 p-1 text-zinc-200 font-semibold rounded-md shadow-md shadow-zinc-400'></i></button>
+                <button id="logoutBtn"><i class='bx bx-log-out text-3xl bg-red-500 p-1 text-white font-semibold rounded-md border border-white'></i></button>
             </a>
         </div>
         <ul id="messageBox" class="p-4 overflow-y-auto space-y-2">
@@ -48,7 +39,7 @@
         </ul>
         <div id="typingIndicator" class="hidden text-gray-500 text-sm px-4 py-2"></div>
         <form class="p-2 flex items-center">
-            <input type="text" placeholder="Enter your message" class="flex-1 p-2 border bg-white border-gray-500  rounded-lg focus:outline-none focus:border-red-500 transition duration-300 ease-in-out">
+            <input type="text" placeholder="Enter your message" class="flex-1 p-2 border bg-white border-gray-500 rounded-lg focus:outline-none focus:border-red-500 transition duration-300 ease-in-out">
             <button type="submit" class="">
                 <i class='bx bxs-send ml-3 p-2 shadow-lg shadow-zinc-700 text-3xl bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300 ease-in-out'></i>
             </button>
@@ -61,6 +52,8 @@
         let roomName = localStorage.getItem('roomName') || "<%= response[2] %>";
         const roomVal = document.getElementById('roomVal').innerHTML = roomName;
         localStorage.setItem('roomName', roomName);
+
+        const userCountElement = document.getElementById('userCount');
     
         const socket = io();
     
@@ -102,6 +95,10 @@
             msgBox.appendChild(item);
             msgBox.scrollTop = msgBox.scrollHeight;
         });
+
+        socket.on('update user count', ({ userCount }) => {
+            userCountElement.textContent = `Online: ${userCount}`;
+        });
     
         socket.on('typing', (userId) => {
             typingIndicator.textContent = `${userId} is typing...`;
@@ -133,9 +130,7 @@
             }, 3000);
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', () =>  localStorage.removeItem('roomName'))
-    
+        document.getElementById('logoutBtn').addEventListener('click', () => localStorage.removeItem('roomName'))
     </script>
-    
 </body>
 </html>

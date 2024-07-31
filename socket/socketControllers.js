@@ -2,31 +2,47 @@ const Message = require('../models/messageModel');
 const Filter = require('bad-words');
 const filter = new Filter();
 
+const usersInRoom = {}; 
+
 const handleUserConnected = (io, socket, { userId, roomName }) => {
     socket.userId = userId;
     socket.roomName = roomName;
-    socket.join(roomName); 
+    socket.join(roomName);
+
+    if (!usersInRoom[roomName]) {
+        usersInRoom[roomName] = new Set();
+    }
+    usersInRoom[roomName].add(userId);
 
     const message = `${userId} joined the room ${roomName}`;
-    io.to(roomName).emit('user join', { message }); 
+    io.to(roomName).emit('user join', { message });
+    io.to(roomName).emit('update user count', { userCount: usersInRoom[roomName].size });
 };
+
+const handleDisconnect = (io, socket) => {
+    if (socket.userId && socket.roomName) {
+        usersInRoom[socket.roomName].delete(socket.userId);
+        const message = `${socket.userId} left the room`;
+        io.to(socket.roomName).emit('user left', { message });
+        io.to(socket.roomName).emit('update user count', { userCount: usersInRoom[socket.roomName].size });
+
+        if (usersInRoom[socket.roomName].size === 0) {
+            delete usersInRoom[socket.roomName];
+        }
+    }
+};
+
 
 const handleReconnect = (io, socket, { userId, roomName }) => {
     handleUserConnected(io, socket, { userId, roomName });
 };
 
-const handleDisconnect = (io, socket) => {
-    if (socket.userId && socket.roomName) {
-        const message = `${socket.userId} left the room`;
-        io.to(socket.roomName).emit('user left', { message });
-    }
-};
+
 
 const handleChatMessage = async (io, socket, msg) => {
     const { userId, message } = msg;
     const roomName = socket.roomName; 
 
-    console.log(roomName)
 
     if (!roomName) {
         console.error('Room name is not defined');
