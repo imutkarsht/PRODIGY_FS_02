@@ -6,8 +6,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const db = require('./config/db');
 const chatRoutes = require('./routes/chatRoutes');
-const roomRoutes = require('./routes/roomRoutes')
-const checkCookie = require('./middlewares/checkCookie')
 const socketEvents = require('./socket/socketEvents');
 const app = express();
 const server = createServer(app);
@@ -20,7 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
 app.use('/', chatRoutes);
-app.use('/room', checkCookie('username'), roomRoutes)
 
 socketEvents(io);
 

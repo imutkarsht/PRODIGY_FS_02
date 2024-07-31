@@ -2,21 +2,37 @@ const Message = require('../models/messageModel');
 const Filter = require('bad-words');
 const filter = new Filter();
 
-const handleUserConnected = (io, socket, userId) => {
-    socket.userId = userId; 
-    const message = `${userId} joined the room`;
-    io.emit('user join', { message });
+const handleUserConnected = (io, socket, { userId, roomName }) => {
+    socket.userId = userId;
+    socket.roomName = roomName;
+    socket.join(roomName); 
+
+    const message = `${userId} joined the room ${roomName}`;
+    io.to(roomName).emit('user join', { message }); 
+};
+
+const handleReconnect = (io, socket, { userId, roomName }) => {
+    handleUserConnected(io, socket, { userId, roomName });
 };
 
 const handleDisconnect = (io, socket) => {
-    if (socket.userId) {
+    if (socket.userId && socket.roomName) {
         const message = `${socket.userId} left the room`;
-        io.emit('user left', { message });
+        io.to(socket.roomName).emit('user left', { message });
     }
 };
 
 const handleChatMessage = async (io, socket, msg) => {
     const { userId, message } = msg;
+    const roomName = socket.roomName; 
+
+    console.log(roomName)
+
+    if (!roomName) {
+        console.error('Room name is not defined');
+        return;
+    }
+
     const trimmedMessage = message.trim();
 
     if (!trimmedMessage || /^[\p{Emoji}\s]+$/u.test(trimmedMessage)) {
@@ -26,7 +42,8 @@ const handleChatMessage = async (io, socket, msg) => {
     const filteredMessage = filter.clean(trimmedMessage);
     const newMessage = new Message({
         data: filteredMessage,
-        sender: userId
+        sender: userId,
+        belongsTo: roomName
     });
 
     try {
@@ -36,22 +53,25 @@ const handleChatMessage = async (io, socket, msg) => {
             message: filteredMessage,
             sentAt: newMessage.sentAt
         };
-        io.emit('chat message', response);
+        io.to(roomName).emit('chat message', response); 
     } catch (error) {
         console.error('Error saving message:', error);
     }
 };
 
 const handleTyping = (socket, userId) => {
-    socket.broadcast.emit('typing', userId);
+    const roomName = socket.roomName; 
+    socket.to(roomName).emit('typing', userId); 
 };
 
 const handleStopTyping = (socket, userId) => {
-    socket.broadcast.emit('stop typing', userId);
+    const roomName = socket.roomName; 
+    socket.to(roomName).emit('stop typing', userId); 
 };
 
 module.exports = {
     handleUserConnected,
+    handleReconnect,
     handleDisconnect,
     handleChatMessage,
     handleTyping,

@@ -14,8 +14,8 @@ const messageSchema = new mongoose.Schema({
         type: String
     },
     belongsTo: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatRoom'
+        type: "string",
+        required: true
     }
 }, { timestamps: true });
 

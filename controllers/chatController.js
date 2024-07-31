@@ -3,74 +3,83 @@ const ActiveUsers = require('../models/activeUsersModel');
 const ChatRoom = require('../models/chatRoomModel');
 
 const handleGetHome = (req, res) => {
-    const username = req.cookies.username;
-    if (username) {
-        res.redirect('/chat');
+    const cookieData = req.cookies.cookieData || {};
+    const username = cookieData.username;
+    const roomName = cookieData.room;
+    if (username && roomName) {
+        res.redirect(`/chat/${roomName}`);
     } else {
         res.render('home');
     }
-}
+};
 
-const handleGetChat =  async (req, res) => {
-    const username = req.cookies.username;
+const handleGetChat = async (req, res) => {
+    const cookieData = req.cookies.cookieData || {};
+    const username = cookieData.username;
+    const cookieRoom = cookieData.room;
+    const room = req.params.room;
+    if(cookieRoom !== room) return res.redirect(`/chat/${cookieRoom}?message=leave%20this%20room%to%20join%20other`)
     if (!username) {
         res.redirect('/?message=Please%20Join%20with%20username%20first');
     } else {
-        const messages = await Message.find({});
-        const response = [username, messages];
-        res.render('chat', { response: response });
+        try {
+            const messages = await Message.find({ belongsTo: room });
+            const response = [username, messages];
+            res.render('chat', { response });
+        } catch (error) {
+            console.error('Error retrieving messages:', error);
+            res.redirect('/?message=something%20went%20wrong');
+        }
     }
-}
+};
 
 const handlePostChats = async (req, res) => {
     const username = req.body.username.trim();
-
-    const existingUser = await ActiveUsers.findOne({ username: username });
+    const room = req.body.room;
+    const existingUser = await ActiveUsers.findOne({ username });
+    if(!room) return res.redirect('/?message=please%20select%20a%20valid%20room')
 
     if (existingUser) {
         return res.redirect('/?message=Username%20already%20taken');
     }
-    
+
     if (username.length < 4 || /[^a-zA-Z0-9_$]/.test(username)) {
-        res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)');
-        return;
+        return res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)');
     }
-    
 
     try {
-        await new ActiveUsers({
-            username: username,
-        }).save();
-
+        await new ActiveUsers({ username }).save();
     } catch (error) {
         console.error('Error saving username to database:', error);
         return res.redirect('/?message=something%20went%20wrong');
     }
 
-    res.cookie('username', username, { maxAge: 25 * 60 * 1000 });
-     try {
-        const messages = await Message.find({});
-        const response = [username, messages];
-        res.render('chat', { response: response });
+    res.cookie('cookieData', { username, room }, { maxAge: 25 * 60 * 1000 });
+
+    try {
+        const messages = await Message.find({ belongsTo: room });
+        const response = [username, messages, room];
+        res.render('chat', { response });
     } catch (error) {
         console.error('Error retrieving messages:', error);
         res.redirect('/?message=something%20went%20wrong');
     }
-}
+};
 
 const handleLeaveRoom = async (req, res) => {
-    const username = req.cookies.username;
+    const cookieData = req.cookies.cookieData || {};
+    const username = cookieData.username;
 
     if (username) {
         try {
-            const user = await ActiveUsers.findOne({ username: username });
-            
+            const user = await ActiveUsers.findOne({ username });
+
             if (user) {
-                await ActiveUsers.deleteOne({ username: username });
+                await ActiveUsers.deleteOne({ username });
                 await ChatRoom.deleteMany({ createdBy: user._id });
             }
 
-            res.cookie('username', '', { expires: new Date(0), httpOnly: true });
+            res.cookie('cookieData', '', { expires: new Date(0), httpOnly: true });
             res.redirect('/?message=you%20left%20the%20room');
         } catch (error) {
             console.error('Error handling leave room:', error);
@@ -86,4 +95,4 @@ module.exports = {
     handleGetChat,
     handlePostChats,
     handleLeaveRoom
-}
+};

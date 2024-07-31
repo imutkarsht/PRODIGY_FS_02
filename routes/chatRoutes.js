@@ -11,9 +11,9 @@ const
 
 router.get('/', handleGetHome);
 
-router.get('/chat', handleGetChat);
+router.get('/chat/:room', handleGetChat);
 
-router.post('/chat', handlePostChats);
+router.post('/chat/:room', handlePostChats);
 
 router.get('/logout', handleLeaveRoom);
 
