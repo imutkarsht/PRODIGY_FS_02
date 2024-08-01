@@ -14,15 +14,18 @@
         <div class="overlay"></div>
     </div>    
     <div class="fixed top-0 md:top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-md md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-700">
-        <div class="flex justify-between relative bg-red-500 shadow-md shadow-zinc-800 text-black items-center py-3 px-4 text-xl font-semibold">
+        <div class="flex justify-between bg-red-500 shadow-md shadow-zinc-800 text-black items-center py-3 px-4 text-xl font-semibold">
             <div class="flex gap-2 items-center">
                 <i class='bx bxs-chat text-2xl text-white'></i>
                 <h3 id="roomVal" class="text-white font-semibold"></h3>
             </div>
-            <button class="self-center text-white text-base font-semibold" id="userCount">Online: 0</button>
-            <ul id="activeUserList" class="absolute hidden left-[35%] top-[9.5vh] backdrop-blur-md px-0 py-0 text-lg font-semibold text-zinc-700 w-[20vw] shadow-sm shadow-zinc-500 flex-col items-center justify-center rounded-b-md">
+            <div class="self-center relative">
+                <button class=" text-white text-base font-semibold" id="userCount">Online: 0</button>
+                <ul id="activeUserList" class="absolute hidden md:left-[-2.5vw] top-[45px] left-[-4.5vw]  bg-white bg-opacity-95 z-10  py-0 text-lg font-semibold text-zinc-700 shadow-sm shadow-zinc-500 flex-col items-center justify-center rounded-b-md ">
+                </ul>
+            </div>
+            
                 <!-- Active users will be dynamically added here -->
-            </ul>
             <a href="/logout">
                 <button id="logoutBtn"><i class='bx bx-log-out text-3xl bg-red-500 p-1 text-white font-semibold rounded-md border border-white'></i></button>
             </a>
@@ -108,7 +111,7 @@
             activeUserList.innerHTML = '';
             users.forEach(user => {
                 const item = document.createElement('li');
-                item.classList.add('shadow-inner', 'shadow-zinc-300', 'w-full', 'text-center');
+                item.classList.add('shadow-inner', 'shadow-zinc-300', 'w-full', 'px-10', 'text-center');
                 item.textContent = user;
                 activeUserList.appendChild(item);
             });
