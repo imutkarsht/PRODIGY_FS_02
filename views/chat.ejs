@@ -9,25 +9,38 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body class="bg-white text-black w-full">
-    <div class="background-container">
-        <img src="/images/chat.jpg" alt="banner">
+    <nav class="bg-red-500 z-100 flex items-center z-100 justify-between p-2 py-2 md:py-0 text-3xl text-white font-semibold">
+        <a href="/">
+            <h1>Chatify</h1>
+        </a>
+        <button class="md:hidden block" id="hamburger">
+            <i id="menuIcon" class='bx bx-menu-alt-right text-4xl'></i>
+        </button>
+        <ul id="navMenu" class="text-3xl md:text-lg md:shadow-none shadow-md shadow-zinc-300 gap-4 md:flex md:items-center md:static md:flex-row md:gap-4 hidden flex-col absolute w-full bg-transparent text-zinc-700 md:text-white md:backdrop-blur-0 backdrop-blur-md top-12 left-0 md:w-auto md:bg-transparent">
+            <li><a href="/#" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">Rooms</a></li>
+            <li><a href="/about" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">About</a></li>
+            <li><a href="/feedback" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">Feedback</a></li> 
+        </ul>
+    </nav>
+    <div class="background-container md:h-[91vh] h-[93.5vh]">
+        <img src="/images/chat.jpg" alt="banner" class="h-[100%]">
         <div class="overlay"></div>
     </div>    
-    <div class="fixed top-0 md:top-[10vh] md:left-[25vw] left-[2vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-md md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[96vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-700">
-        <div class="flex justify-between bg-red-500 shadow-md shadow-zinc-800 text-black items-center py-3 px-4 text-xl font-semibold">
+    <div class="fixed top-0 md:top-[10vh] md:left-[25vw] left-[0vw] backdrop-blur-sm bg-white bg-opacity-45 shadow-md md:max-h-[80vh] max-h-[90vh] md:w-[50vw] w-[100vw] rounded-lg overflow-hidden z-20 border border-gray-200 shadow-zinc-700">
+        <div class="flex justify-between bg-white shadow-md shadow-zinc-800 text-red-500 items-center py-3 px-4 text-xl font-semibold">
             <div class="flex gap-2 items-center">
-                <i class='bx bxs-chat text-2xl text-white'></i>
-                <h3 id="roomVal" class="text-white font-semibold"></h3>
+                <i class='bx bxs-chat text-2xl'></i>
+                <h3 id="roomVal" class=" font-semibold"></h3>
             </div>
             <div class="self-center relative">
-                <button class=" text-white text-base font-semibold" id="userCount">Online: 0</button>
+                <button class="text-black font-semibold text-2xl" id="userCount"><span class="text-green-500 ">Online:</span> 0</button>
                 <ul id="activeUserList" class="absolute hidden md:left-[-2.5vw] top-[45px] left-[-4.5vw]  bg-white bg-opacity-95 z-10  py-0 text-lg font-semibold text-zinc-700 shadow-sm shadow-zinc-500 flex-col items-center justify-center rounded-b-md ">
                 </ul>
             </div>
             
                 <!-- Active users will be dynamically added here -->
             <a href="/logout">
-                <button id="logoutBtn"><i class='bx bx-log-out text-3xl bg-red-500 p-1 text-white font-semibold rounded-md border border-white'></i></button>
+                <button id="logoutBtn"><i class='bx bx-log-out text-3xl shadow-md shadow-zinc-500 bg-red-500 p-1 text-white font-semibold rounded-md border border-white'></i></button>
             </a>
         </div>
         <ul id="messageBox" class="p-4 overflow-y-auto space-y-2">
@@ -51,7 +64,7 @@
             </button>
         </form>
     </div>
-    
+    <script src="/scripts/nav.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const userId = "<%= response[0] %>";
@@ -104,7 +117,7 @@
         });
 
         socket.on('update user count', ({ userCount }) => {
-            userCountElement.textContent = `Online: ${userCount}`;
+            userCountElement.innerHTML = `<span class="text-green-500 ">Online:</span>  ${userCount}`;
         });
 
         socket.on('update active users', ({ users }) => {
