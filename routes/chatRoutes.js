@@ -5,7 +5,9 @@ const
     handleGetHome,
     handleGetChat, 
     handlePostChats,
-    handleLeaveRoom
+    handleLeaveRoom,
+    handleGetFeedbackPage,
+    handlePostReview
 } 
 = require('../controllers/chatController');
 
@@ -16,5 +18,9 @@ router.get('/chat/:room', handleGetChat);
 router.post('/chat/:room', handlePostChats);
 
 router.get('/logout', handleLeaveRoom);
+
+router.get('/feedback', handleGetFeedbackPage)
+
+router.post('/feedback', handlePostReview)
 
 module.exports = router;

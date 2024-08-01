@@ -1,6 +1,7 @@
 const Message = require('../models/messageModel');
 const ActiveUsers = require('../models/activeUsersModel');
 const ChatRoom = require('../models/chatRoomModel');
+const feedback = require('../models/feedbackModel')
 
 const handleGetHome = (req, res) => {
     const cookieData = req.cookies.cookieData || {};
@@ -20,7 +21,7 @@ const handleGetChat = async (req, res) => {
     const room = req.params.room;
     if(cookieRoom !== room) return res.redirect(`/chat/${cookieRoom}?message=leave%20this%20room%to%20join%20other`)
     if (!username) {
-        res.redirect('/?message=Please%20Join%20with%20username%20first');
+        res.redirect('/?message=Please%20Join%20with%20username%20first%20-f');
     } else {
         try {
             const messages = await Message.find({ belongsTo: room });
@@ -28,30 +29,30 @@ const handleGetChat = async (req, res) => {
             res.render('chat', { response });
         } catch (error) {
             console.error('Error retrieving messages:', error);
-            res.redirect('/?message=something%20went%20wrong');
+            res.redirect('/?message=something%20went%20wrong%20-f');
         }
     }
 };
 
 const handlePostChats = async (req, res) => {
-    const username = req.body.username.trim();
+    const username = (req.body.username.trim()).toLowerCase();
     const room = req.body.room;
     const existingUser = await ActiveUsers.findOne({ username });
-    if(!room) return res.redirect('/?message=please%20select%20a%20valid%20room')
+    if(!room) return res.redirect('/?message=please%20select%20a%20valid%20room%20-f')
 
     if (existingUser) {
-        return res.redirect('/?message=Username%20already%20taken');
+        return res.redirect('/?message=Username%20already%20taken%20-f');
     }
 
     if (username.length < 4 || /[^a-zA-Z0-9_$]/.test(username)) {
-        return res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)');
+        return res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)%20-f');
     }
 
     try {
         await new ActiveUsers({ username }).save();
     } catch (error) {
         console.error('Error saving username to database:', error);
-        return res.redirect('/?message=something%20went%20wrong');
+        return res.redirect('/?message=something%20went%20wrong%20-f');
     }
 
     res.cookie('cookieData', { username, room }, { maxAge: 25 * 60 * 1000 });
@@ -62,7 +63,7 @@ const handlePostChats = async (req, res) => {
         res.render('chat', { response });
     } catch (error) {
         console.error('Error retrieving messages:', error);
-        res.redirect('/?message=something%20went%20wrong');
+        res.redirect('/?message=something%20went%20wrong%20-f');
     }
 };
 
@@ -90,9 +91,37 @@ const handleLeaveRoom = async (req, res) => {
     }
 };
 
+const handleGetFeedbackPage = (req, res) => {
+    res.render('feedback')
+}
+
+const handlePostReview = async (req, res) => {
+    const { name, email, review } = req.body;
+    // Regular expression for validating email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Validate email format
+    if (!emailRegex.test(email)) {
+        return res.redirect('/feedback?message=Invalid%20email%20format%20-f');
+    }
+
+    try {
+        const newReview = await new feedback({ name, email, review }).save();
+        if (!newReview) {
+            return res.redirect('/feedback?message=fail%20to%20send%20review%20-f');
+        }
+        return res.redirect('/feedback?message=feedback%20recorded%20Successfully%20-s');
+    } catch (error) {
+        console.error('Error saving review:', error);
+        return res.redirect('/feedback?message=An%20error%20occurred%20while%20saving%20the%20review%20-f');
+    }
+};
+
+
 module.exports = {
     handleGetHome,
     handleGetChat,
     handlePostChats,
-    handleLeaveRoom
+    handleLeaveRoom,
+    handleGetFeedbackPage,
+    handlePostReview
 };
