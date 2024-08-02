@@ -36,6 +36,7 @@ const handleGetChat = async (req, res) => {
 
 const handlePostChats = async (req, res) => {
     const username = (req.body.username.trim()).toLowerCase();
+    const avatar = req.body.avatar
     const room = req.body.room;
     const existingUser = await ActiveUsers.findOne({ username });
     if(!room) return res.redirect('/?message=please%20select%20a%20valid%20room%20-f')
@@ -49,7 +50,7 @@ const handlePostChats = async (req, res) => {
     }
 
     try {
-        await new ActiveUsers({ username }).save();
+        await new ActiveUsers({ username, avatar }).save();
     } catch (error) {
         console.error('Error saving username to database:', error);
         return res.redirect('/?message=something%20went%20wrong%20-f');
@@ -59,7 +60,7 @@ const handlePostChats = async (req, res) => {
 
     try {
         const messages = await Message.find({ belongsTo: room });
-        const response = [username, messages, room];
+        const response = [username, messages, room, avatar];
         res.render('chat', { response });
     } catch (error) {
         console.error('Error retrieving messages:', error);
@@ -97,9 +98,7 @@ const handleGetFeedbackPage = (req, res) => {
 
 const handlePostReview = async (req, res) => {
     const { name, email, review } = req.body;
-    // Regular expression for validating email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // Validate email format
     if (!emailRegex.test(email)) {
         return res.redirect('/feedback?message=Invalid%20email%20format%20-f');
     }

@@ -4,9 +4,10 @@ const filter = new Filter();
 
 const usersInRoom = {}; 
 
-const handleUserConnected = (io, socket, { userId, roomName }) => {
+const handleUserConnected = (io, socket, { userId, roomName, avatar }) => {
     socket.userId = userId;
     socket.roomName = roomName;
+    socket.avatar = avatar;
     socket.join(roomName);
 
     if (!usersInRoom[roomName]) {
@@ -36,14 +37,14 @@ const handleDisconnect = (io, socket) => {
 };
 
 
-const handleReconnect = (io, socket, { userId, roomName }) => {
-    handleUserConnected(io, socket, { userId, roomName });
+const handleReconnect = (io, socket, { userId, roomName, avatar }) => {
+    handleUserConnected(io, socket, { userId, roomName, avatar });
 };
 
 
 
 const handleChatMessage = async (io, socket, msg) => {
-    const { userId, message } = msg;
+    const { userId, message, avatar } = msg;
     const roomName = socket.roomName; 
 
 
@@ -62,7 +63,8 @@ const handleChatMessage = async (io, socket, msg) => {
     const newMessage = new Message({
         data: filteredMessage,
         sender: userId,
-        belongsTo: roomName
+        belongsTo: roomName,
+        avatar: avatar
     });
 
     try {
@@ -70,7 +72,8 @@ const handleChatMessage = async (io, socket, msg) => {
         const response = {
             from: userId,
             message: filteredMessage,
-            sentAt: newMessage.sentAt
+            sentAt: newMessage.sentAt,
+            avatar: avatar
         };
         io.to(roomName).emit('chat message', response); 
     } catch (error) {

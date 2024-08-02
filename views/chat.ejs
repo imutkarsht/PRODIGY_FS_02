@@ -45,17 +45,30 @@
         </div>
         <ul id="messageBox" class="p-4 overflow-y-auto space-y-2">
             <% if (response[1].length === 0) { %>
-                <li class="text-center text-gray-900"></li>
+                <li class="text-center text-gray-900">No messages yet</li>
             <% } else { %>
                 <% response[1].forEach(message => { %>
-                    <li class="message <%= message.sender === response[0] ? 'sent' : '' %>">
-                        <h3 class="message-header"><%= message.sender %></h3>
-                        <p class="message-body text-base"><%= message.data %></p>
-                        <p class="text-xs flex w-full justify-end"><%= message.sentAt %></p>
+                    <li class="flex items-start <%= message.sender === response[0] ? 'justify-end' : 'justify-start' %>">
+                        <div class="flex items-center  space-x-2">
+                            <% if (message.sender !== response[0]) { %>
+                                <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
+                            <% } %>
+                            <div class="flex flex-col">
+                                <h3 class="message-header px-3 self-start font-semibold"><%= message.sender %></h3>
+                                <div class="p-3 py-1 rounded-lg max-w-xs <%= message.sender === response[0] ? 'bg-gradient-to-b from-red-300 to-red-500 text-white' : 'bg-gradient-to-b from-gray-100 to-red-300 text-gray-800' %>">
+                                    <p class="message-body text-base"><%= message.data %></p>
+                                    <p class="text-xs flex w-full justify-end"><%= message.sentAt %></p>
+                                </div>
+                            </div>
+                            <% if (message.sender === response[0]) { %>
+                                <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full  border border-gray-300">
+                            <% } %>
+                        </div>
                     </li>
                 <% }) %>
             <% } %>
         </ul>
+        
         <div id="typingIndicator" class="hidden text-gray-500 text-sm px-4 py-2"></div>
         <form class="p-2 flex items-center">
             <input type="text" placeholder="Enter your message" class="flex-1 p-2 border bg-white border-gray-500 rounded-lg focus:outline-none focus:border-red-500 transition duration-300 ease-in-out">
@@ -68,16 +81,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const userId = "<%= response[0] %>";
+        const avatar = localStorage.getItem('avatar') || "<%= response[3] %>";
         let roomName = localStorage.getItem('roomName') || "<%= response[2] %>";
         const roomVal = document.getElementById('roomVal').innerHTML = roomName;
         localStorage.setItem('roomName', roomName);
-
+        localStorage.setItem('avatar', avatar)
         const userCountElement = document.getElementById('userCount');
         const activeUserList = document.getElementById('activeUserList');
     
         const socket = io();
     
-        socket.emit('user connected', { userId, roomName });
+        socket.emit('user connected', { userId, roomName, avatar });
     
         const form = document.querySelector('form');
         const input = document.querySelector('input');
@@ -87,18 +101,32 @@
     
         socket.on('chat message', (msg) => {
             const item = document.createElement('li');
-            item.classList.add('message');
-            if (msg.from === userId) {
-                item.classList.add('sent');
-            }
+            item.classList.add('flex', 'items-start', msg.from === userId ? 'justify-end' : 'justify-start');
+            
             item.innerHTML = `
-                <h3 class="message-header">${msg.from}</h3>
-                <p class="message-body">${msg.message}</p>
-                <p class="text-xs flex w-full justify-end">${msg.sentAt}</p>
+                <div class="flex items-center space-x-2">
+                    ${msg.from !== userId ? 
+                        `<img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">`
+                        : ''}
+                    <div class="flex flex-col">
+                        <h3 class="message-header self-start font-semibold">${msg.from}</h3>
+                        <div class="bg-gradient-to-b ${msg.from === userId ? 'from-red-200 to-red-400' : 'from-gray-100 to-red-200'} p-3 py-1 rounded-lg max-w-xs text-white">
+                            <p class="message-body text-base">${msg.message}</p>
+                            <p class="text-xs text-black flex w-full justify-end">${msg.sentAt}</p>
+                        </div>
+                    </div>
+                    ${msg.from === userId ? 
+                        `<img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">`
+                        : ''}
+                </div>
             `;
+            
             msgBox.appendChild(item);
             msgBox.scrollTop = msgBox.scrollHeight;
         });
+        
+        
+        
     
         socket.on('user join', (response) => {
             const item = document.createElement('li');
@@ -145,6 +173,7 @@
                 const messageBody = {
                     message: input.value,
                     userId: userId,
+                    avatar: avatar
                 };
                 socket.emit('chat message', messageBody);
                 socket.emit('stop typing', userId);
@@ -160,7 +189,10 @@
             }, 3000);
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => localStorage.removeItem('roomName'))
+        document.getElementById('logoutBtn').addEventListener('click', () =>{
+            localStorage.removeItem('avatar')
+            localStorage.removeItem('roomName')
+        }) 
 
         userCountElement.addEventListener('click', () => {
             if(activeUserList.classList.contains('flex')){

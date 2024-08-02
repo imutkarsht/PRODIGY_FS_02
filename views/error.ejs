@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="/styles/output.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="bg-white text-black min-h-[100vh] w-full">
+    <nav class="bg-red-500 flex items-center z-50 justify-between p-2 py-2 md:py-0 text-3xl text-white font-semibold">
+        <a href="/">
+            <h1>Chatify</h1>
+        </a>
+        <button class="md:hidden block" id="hamburger">
+            <i id="menuIcon" class='bx bx-menu-alt-right text-4xl'></i>
+        </button>
+        <ul id="navMenu" class="text-3xl md:text-lg md:shadow-none shadow-md shadow-zinc-300 gap-4 md:flex md:items-center md:static md:flex-row md:gap-4 hidden flex-col absolute w-full bg-transparent text-zinc-700 md:text-white md:backdrop-blur-0 backdrop-blur-md top-12 left-0 md:w-auto md:bg-transparent">
+            <li><a href="/#" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">Rooms</a></li>
+            <li><a href="/about" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">About</a></li>
+            <li><a href="/feedback" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">Feedback</a></li> 
+        </ul>
+    </nav>
+    <div class="flex w-full flex-wrap-reverse items-center mt-[2vh] p-8 justify-between">
+        <div class="md:w-1/2 w-full">
+            <div class="flex flex-col mt-[10vh] p-8">
+                <h2 class="md:text-4xl text-2xl mb-[2vh] font-bold text-zinc-950">Page Not Found</h2>
+                <p class="md:text-lg text-base md:pr-20 pr-0 font-semibold text-zinc-600">
+                    Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+                </p>
+                <a 
+                    href="/" 
+                    class="mt-8 py-3 px-6 rounded-md w-fit bg-red-500 hover:bg-red-600 text-lg font-semibold text-white  transition duration-300 ease-in-out shadow-md"
+                >
+                    Go Back Home
+                </a>
+            </div>
+        </div>
+        <div class="p-4 md:w-1/2 w-full flex justify-end">
+            <img src="/images/notfound.png" alt="banner">
+        </div>
+    </div>
+    
+    <script src="/scripts/nav.js"></script>
+</body>
+</html>

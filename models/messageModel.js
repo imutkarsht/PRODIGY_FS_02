@@ -16,7 +16,12 @@ const messageSchema = new mongoose.Schema({
     belongsTo: {
         type: "string",
         required: true
+    },
+    avatar: {
+        type: String,
+        required: true
     }
+    
 }, { timestamps: true });
 
 messageSchema.pre('save', function(next) {

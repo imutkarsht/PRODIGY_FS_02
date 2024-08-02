@@ -19,6 +19,10 @@ app.use(cookieParser());
 
 app.use('/', chatRoutes);
 
+app.use((req, res) => {
+    res.render('error');
+});
+
 socketEvents(io);
 
 const port = process.env.PORT || 3000;

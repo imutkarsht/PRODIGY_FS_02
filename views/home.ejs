@@ -24,9 +24,10 @@
     <div class="flex w-full flex-wrap-reverse items-center mt-[2vh] p-8 justify-between">
         <div class="md:w-1/2 w-full">
             <h1 class="md:text-7xl text-4xl mb-[3vh] font-bold text-zinc-950">Join the fun of chat!</h1>
-            <p class="md:text-lg text-base md:pr-20 pr-0 font-semibold text-zinc-600">
-                Chatify is a cutting-edge real-time chat application developed using Node.js, MongoDB, Socket.io, and Tailwind CSS. Our platform allows users to engage in anonymous conversations with others on the server seamlessly. Experience instant messaging with no delays, Chatify ensures your privacy and security. Simply enter your desired username to join the chat and start engaging with others. We encourage a respectful and inclusive environment for all users. Enjoy Chatify and happy chatting!
-            </p>
+            <p class="text-2xl text-zinc-700 mb-4">Pick your avatar</p>
+            <div id="avatars" class="flex bg-white rounded-md shadow-sm shadow-zinc-300 flex-wrap p-4 gap-3">
+                <!-- Avatars will be loaded here -->
+            </div>
             <form id="chatForm" method="post" class="flex flex-col items-center gap-4 mt-8 md:flex-row">
                 <input 
                     type="text" 
@@ -36,7 +37,7 @@
                 >
                 <select name="room" id="roomSelect" class="bg-white w-full md:w-auto border border-gray-300 rounded-lg py-3 px-4 text-gray-700">
                 </select>
-                
+                <input type="hidden" name="avatar" id="selectedAvatar">
                 <button 
                     type="submit" 
                     class="py-3 px-6 rounded-md bg-red-500 text-lg font-semibold text-white hover:bg-red-600 transition duration-300 ease-in-out shadow-md w-full md:w-auto"
@@ -54,6 +55,9 @@
     <script src="/scripts/handlePopulateOptions.js"></script>
     <script src="/scripts/handleMessage.js"></script>
     <script>
+        const avatars = document.getElementById('avatars');
+        const selectedAvatarInput = document.getElementById('selectedAvatar');
+
         document.getElementById('chatForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const form = e.target;
@@ -61,6 +65,25 @@
             form.action = `/chat/${room}`;
             form.submit();
         });
+
+        function formatAvatarUrl(url) {
+            const startIndex = url.indexOf('/images');
+            return startIndex !== -1 ? url.substring(startIndex) : url;
+        }
+
+        for (let i = 1; i <= 4; i++) {
+            const img = document.createElement('img');
+            img.alt = `avatar${i}`;
+            img.src = `/images/avatar${i}.jpg`;
+            img.classList.add('w-20', 'border-2', 'border-zinc-800', 'cursor-pointer', 'rounded-full', 'hover:border-red-500', 'transition', 'duration-200', 'ease-in-out');
+            img.addEventListener('click', () => {
+                const allAvatars = avatars.querySelectorAll('img');
+                allAvatars.forEach(avatar => avatar.classList.remove('border-red-500'));
+                img.classList.add('border-red-500');
+                selectedAvatarInput.value = formatAvatarUrl(img.src);
+            });
+            avatars.appendChild(img);
+        }
     </script>
 </body>
 </html>

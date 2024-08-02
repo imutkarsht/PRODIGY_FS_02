@@ -5,6 +5,10 @@ const activeUsersSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    avatar: {
+        type: String,
+        required: true
     }
 });
 
