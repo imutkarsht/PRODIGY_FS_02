@@ -25,22 +25,22 @@
         <div class="md:w-1/2 w-full">
             <h1 class="md:text-7xl text-4xl mb-[3vh] font-bold text-zinc-950">Join the fun of chat!</h1>
             <p class="text-2xl text-zinc-700 mb-4">Pick your avatar</p>
-            <div id="avatars" class="flex bg-white rounded-md shadow-sm shadow-zinc-300 flex-wrap p-4 gap-3">
+            <div id="avatars" class="flex bg-white rounded-md shadow-sm shadow-zinc-300 flex-wrap items-center justify-center p-4 gap-3">
                 <!-- Avatars will be loaded here -->
             </div>
-            <form id="chatForm" method="post" class="flex flex-col items-center gap-4 mt-8 md:flex-row">
+            <form id="chatForm" method="post" class="flex flex-wrap flex-col items-center gap-4 mt-8 md:flex-row">
                 <input 
                     type="text" 
                     name="username"
                     placeholder="Pick a username" 
-                    class="py-3 px-4 text-lg rounded-md border border-gray-300 focus:outline-none focus:border-2 focus:border-red-500 transition duration-300 ease-in-out shadow-sm w-full md:w-auto"
+                    class="py-2 px-4 text-lg rounded-md border border-gray-300 focus:outline-none focus:border-2 focus:border-red-500 transition duration-300 ease-in-out shadow-sm w-full md:w-auto"
                 >
                 <select name="room" id="roomSelect" class="bg-white w-full md:w-auto border border-gray-300 rounded-lg py-3 px-4 text-gray-700">
                 </select>
                 <input type="hidden" name="avatar" id="selectedAvatar">
                 <button 
                     type="submit" 
-                    class="py-3 px-6 rounded-md bg-red-500 text-lg font-semibold text-white hover:bg-red-600 transition duration-300 ease-in-out shadow-md w-full md:w-auto"
+                    class="py-2 px-4 rounded-md bg-red-500 text-lg font-semibold text-white hover:bg-red-600 transition duration-300 ease-in-out shadow-md w-full md:w-auto"
                 >
                     Join Chat
                 </button>
@@ -75,7 +75,7 @@
             const img = document.createElement('img');
             img.alt = `avatar${i}`;
             img.src = `/images/avatars/avatar${i}.jpg`;
-            img.classList.add('w-20', 'border-4', 'border-zinc-200', 'cursor-pointer', 'rounded-full', 'transition', 'duration-200', 'ease-in-out');
+            img.classList.add('w-16','md:w-20', 'border-4', 'border-zinc-200', 'cursor-pointer', 'rounded-full', 'transition', 'duration-200', 'ease-in-out');
             img.addEventListener('click', () => {
                 const allAvatars = avatars.querySelectorAll('img');
                 allAvatars.forEach(avatar => avatar.classList.remove('border-red-500'));

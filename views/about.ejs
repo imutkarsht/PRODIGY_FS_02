@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About us</title>
+    <link rel="stylesheet" href="/styles/output.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body class="bg-white text-black min-h-[100vh] w-full">
+    <nav class="bg-red-500 flex items-center z-50 justify-between p-2 py-2 md:py-0 text-3xl text-white font-semibold">
+        <a href="/">
+            <h1>Chatify</h1>
+        </a>
+        <button class="md:hidden block" id="hamburger">
+            <i id="menuIcon" class='bx bx-menu-alt-right text-4xl'></i>
+        </button>
+        <ul id="navMenu" class="text-3xl md:text-lg md:shadow-none shadow-md shadow-zinc-300 gap-4 md:flex md:items-center md:static md:flex-row md:gap-4 hidden flex-col absolute w-full bg-transparent text-zinc-700 md:text-white md:backdrop-blur-0 backdrop-blur-md top-12 left-0 md:w-auto md:bg-transparent">
+            <li><a href="/#" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">Rooms</a></li>
+            <li><a href="/about" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">About</a></li>
+            <li><a href="/feedback" class="hover:bg-red-400 transition-all duration-200 ease-out p-2 py-4 block">Feedback</a></li> 
+        </ul>
+    </nav>
+    <div class="flex w-full flex-wrap-reverse items-center mt-[2vh] p-8 justify-between">
+        <div class="md:w-1/2 w-full">
+            <div class="flex flex-col md:mt-[10vh] mt-0 md:p-8 p-2 pl-0">
+                <h2 class="md:text-4xl text-2xl mb-[2vh] font-bold text-zinc-950">Welcome to Chatify!</h2>
+                <p class="md:text-lg text-base md:pr-20 pr-0 font-semibold text-zinc-600">
+                    Chatify is a real-time chat application built by <a href="https://github.com/imutkarsht" class="text-red-500">Utkarsh Tiwari</a> as capstone project. The application allow users to get engage in anonymous, instant room based communication. 
+                </p>
+                
+                <p class="md:text-lg text-base md:pr-20 pr-0 font-semibold text-zinc-600">
+                    It is built using MongoDB, Express, Nodejs and socket.io along with tailwindcss and EJS for server side rendering.
+                    <br>
+                    For the Source code of the site <a href="https://github.com/imutkarsht/PRODIGY_FS_02" class="text-red-500">click here</a>
+                    <br>
+                    If you tried my site leave a feedback <a href="/feedback" class="text-red-500">here</a> , It would be beneficial for me in further improvement
+                </p>
+                <div class="flex gap-4 mt-[3vh] bg-zinc-100 px-2 py-1 rounded-xl w-fit items-center">
+                    <h3 class="md:text-lg flex items-center text-base  mb-[2vh] font-bold text-zinc-700">Contact me: </h3>
+                    <div class="flex gap-2 items-center justify-center">
+                        <a href="https://github.com/imutkarsht/">
+                            <i class='bx bxl-github text-4xl text-zinc-900'></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/imutkarsht/">
+                            <i class='bx bxl-linkedin-square text-4xl text-blue-600' ></i>
+                        </a>
+                        <a href="https://imutkarsht-portfolio.vercel.app">
+                            <i class='bx bx-globe text-4xl text-green-500' ></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 md:w-1/2 w-full flex justify-end">
+            <img src="/images/chatting.png" alt="banner">
+        </div>
+    </div>
+    
+    <script src="/scripts/nav.js"></script>
+</body>
+</html>

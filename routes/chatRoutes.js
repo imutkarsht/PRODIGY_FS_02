@@ -23,4 +23,6 @@ router.get('/feedback', handleGetFeedbackPage)
 
 router.post('/feedback', handlePostReview)
 
+router.get('/about', (req, res)=> res.render('about'))
+
 module.exports = router;
