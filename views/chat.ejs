@@ -49,25 +49,31 @@
             <% } else { %>
                 <% response[1].forEach(message => { %>
                     <li class="flex items-start <%= message.sender === response[0] ? 'justify-end' : 'justify-start' %>">
-                        <div class="flex items-center  space-x-2">
+                        <div class="flex items-start space-x-2">
                             <% if (message.sender !== response[0]) { %>
-                                <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
+                                    <h3 class="message-header text-sm mt-1 font-semibold"><%= message.sender %></h3>
+                                </div>
                             <% } %>
                             <div class="flex flex-col">
-                                <h3 class="message-header px-3 self-start font-semibold"><%= message.sender %></h3>
                                 <div class="p-3 py-1 rounded-lg max-w-xs <%= message.sender === response[0] ? 'bg-gradient-to-b from-red-300 to-red-500 text-white' : 'bg-gradient-to-b from-gray-100 to-red-300 text-gray-800' %>">
                                     <p class="message-body text-base"><%= message.data %></p>
                                     <p class="text-xs flex w-full justify-end"><%= message.sentAt %></p>
                                 </div>
                             </div>
                             <% if (message.sender === response[0]) { %>
-                                <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full  border border-gray-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
+                                    <h3 class="message-header text-sm mt-1 font-semibold"><%= message.sender %></h3>
+                                </div>
                             <% } %>
                         </div>
                     </li>
                 <% }) %>
             <% } %>
         </ul>
+        
         
         <div id="typingIndicator" class="hidden text-gray-500 text-sm px-4 py-2"></div>
         <form class="p-2 flex items-center">
@@ -102,25 +108,30 @@
         socket.on('chat message', (msg) => {
             const item = document.createElement('li');
             item.classList.add('flex', 'items-start', msg.from === userId ? 'justify-end' : 'justify-start');
-            
+        
             item.innerHTML = `
-                <div class="flex items-center space-x-2">
+                <div class="flex items-start space-x-2">
                     ${msg.from !== userId ? 
-                        `<img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">`
+                        `<div class="flex flex-col items-center">
+                            <img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
+                            <h3 class="message-header text-sm mt-1 font-semibold">${msg.from}</h3>
+                        </div>`
                         : ''}
                     <div class="flex flex-col">
-                        <h3 class="message-header self-start font-semibold">${msg.from}</h3>
                         <div class="bg-gradient-to-b ${msg.from === userId ? 'from-red-200 to-red-400' : 'from-gray-100 to-red-200'} p-3 py-1 rounded-lg max-w-xs text-white">
                             <p class="message-body text-base">${msg.message}</p>
                             <p class="text-xs text-black flex w-full justify-end">${msg.sentAt}</p>
                         </div>
                     </div>
                     ${msg.from === userId ? 
-                        `<img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">`
+                        `<div class="flex flex-col items-center">
+                            <img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
+                            <h3 class="message-header text-sm mt-1 font-semibold">${msg.from}</h3>
+                        </div>`
                         : ''}
                 </div>
             `;
-            
+        
             msgBox.appendChild(item);
             msgBox.scrollTop = msgBox.scrollHeight;
         });

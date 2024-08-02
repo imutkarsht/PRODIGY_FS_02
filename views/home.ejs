@@ -47,7 +47,7 @@
             </form>
             <p id="msgbox" class="text-red-500"></p>
         </div>
-        <div class="p-4 md:w-1/2 w-full flex justify-end">
+        <div class="p-4 md:w-1/2 w-full md:flex hidden justify-end">
             <img src="/images/banner.png" alt="banner">
         </div>
     </div>
@@ -71,15 +71,19 @@
             return startIndex !== -1 ? url.substring(startIndex) : url;
         }
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 16; i++) {
             const img = document.createElement('img');
             img.alt = `avatar${i}`;
-            img.src = `/images/avatar${i}.jpg`;
-            img.classList.add('w-20', 'border-2', 'border-zinc-800', 'cursor-pointer', 'rounded-full', 'hover:border-red-500', 'transition', 'duration-200', 'ease-in-out');
+            img.src = `/images/avatars/avatar${i}.jpg`;
+            img.classList.add('w-20', 'border-4', 'border-zinc-200', 'cursor-pointer', 'rounded-full', 'transition', 'duration-200', 'ease-in-out');
             img.addEventListener('click', () => {
                 const allAvatars = avatars.querySelectorAll('img');
                 allAvatars.forEach(avatar => avatar.classList.remove('border-red-500'));
+                allAvatars.forEach(avatar => avatar.classList.add('border-zinc-200'));
+        
                 img.classList.add('border-red-500');
+                img.classList.remove('border-zinc-200');
+        
                 selectedAvatarInput.value = formatAvatarUrl(img.src);
             });
             avatars.appendChild(img);
