@@ -36,9 +36,10 @@ const handleGetChat = async (req, res) => {
 
 const handlePostChats = async (req, res) => {
     const username = (req.body.username.trim()).toLowerCase();
-    const avatar = req.body.avatar
+    let avatar = req.body.avatar
     const room = req.body.room;
     const existingUser = await ActiveUsers.findOne({ username });
+    if(!avatar) avatar = '/images/avatars/avatar1.jpg'
     if(!room) return res.redirect('/?message=please%20select%20a%20valid%20room%20-f')
 
     if (existingUser) {
