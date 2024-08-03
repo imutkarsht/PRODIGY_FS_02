@@ -46,8 +46,8 @@ const handlePostChats = async (req, res) => {
         return res.redirect('/?message=Username%20already%20taken%20-f');
     }
 
-    if (username.length < 3 || /[^a-zA-Z0-9_$]/.test(username) || username.length > 10) {
-        return res.redirect('/?message=Username%20should%20be%20in%20range%20(3-10)%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)%20-f');
+    if (username.length < 3 || /[^a-zA-Z0-9_$]/.test(username) || username.length > 14) {
+        return res.redirect('/?message=Username%20should%20be%20in%20range%20(3-14)%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)%20-f');
     }
 
     try {
