@@ -53,19 +53,19 @@
                             <% if (message.sender !== response[0]) { %>
                                 <div class="flex flex-col items-center">
                                     <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
-                                    <h3 class="message-header text-sm mt-1 font-semibold"><%= message.sender %></h3>
+                                    <h3 class="message-header w-[50px] self-start overflow-hidden text-ellipsis text-sm mt-1 font-semibold"><%= message.sender %></h3>
                                 </div>
                             <% } %>
                             <div class="flex flex-col">
-                                <div class="p-3 py-1 rounded-lg max-w-xs <%= message.sender === response[0] ? 'bg-gradient-to-b from-red-300 to-red-500 text-white' : 'bg-gradient-to-b from-gray-100 to-red-300 text-gray-800' %>">
-                                    <p class="message-body text-base"><%= message.data %></p>
-                                    <p class="text-xs flex w-full justify-end"><%= message.sentAt %></p>
+                                <div class="p-3 px-0 py-1 rounded-lg max-w-xs <%= message.sender === response[0] ? 'bg-gradient-to-b from-red-300 to-red-500 text-white' : 'bg-gradient-to-b from-white to-zinc-200 text-gray-900' %>">
+                                    <p class="message-body text-base px-2"><%= message.data %></p>
+                                    <p class="text-[10px] flex w-full px-1 justify-end"><%= message.sentAt %></p>
                                 </div>
                             </div>
                             <% if (message.sender === response[0]) { %>
-                                <div class="flex flex-col items-center">
-                                    <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
-                                    <h3 class="message-header text-sm mt-1 font-semibold"><%= message.sender %></h3>
+                                <div class="flex-col md:flex hidden items-center">
+                                    <img src="<%= message.avatar %>" alt="Avatar" class="w-10 h-10 md:block hidden rounded-full border border-gray-300">
+                                    <h3 class="message-header text-sm w-[50px] self-start overflow-hidden text-ellipsis mt-1 font-semibold"><%= message.sender %></h3>
                                 </div>
                             <% } %>
                         </div>
@@ -114,19 +114,19 @@
                     ${msg.from !== userId ? 
                         `<div class="flex flex-col items-center">
                             <img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
-                            <h3 class="message-header text-sm mt-1 font-semibold">${msg.from}</h3>
+                            <h3 class="message-header w-[50px] self-start overflow-hidden text-ellipsis text-sm mt-1 font-semibold">${msg.from}</h3>
                         </div>`
                         : ''}
                     <div class="flex flex-col">
-                        <div class="bg-gradient-to-b ${msg.from === userId ? 'from-red-200 to-red-400' : 'from-gray-100 to-red-200'} p-3 py-1 rounded-lg max-w-xs text-white">
+                        <div class="bg-gradient-to-b ${msg.from === userId ? 'from-red-300 to-red-500' : 'from-white to-zinc-200'} p-3 py-1 rounded-lg max-w-xs text-white">
                             <p class="message-body text-base">${msg.message}</p>
-                            <p class="text-xs text-black flex w-full justify-end">${msg.sentAt}</p>
+                            <p class="text-[10px] ${msg.from === userId ? 'text-white' : 'text-zinc-800'} flex w-full justify-end">${msg.sentAt}</p>
                         </div>
                     </div>
                     ${msg.from === userId ? 
-                        `<div class="flex flex-col items-center">
+                        `<div class="hidden flex-col md:flex items-center">
                             <img src="${msg.avatar}" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-300">
-                            <h3 class="message-header text-sm mt-1 font-semibold">${msg.from}</h3>
+                            <h3 class="message-header w-[50px] self-start overflow-hidden text-ellipsis text-sm mt-1 font-semibold">${msg.from}</h3>
                         </div>`
                         : ''}
                 </div>

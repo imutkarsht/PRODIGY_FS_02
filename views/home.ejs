@@ -80,10 +80,10 @@
                 const allAvatars = avatars.querySelectorAll('img');
                 allAvatars.forEach(avatar => avatar.classList.remove('border-red-500'));
                 allAvatars.forEach(avatar => avatar.classList.add('border-zinc-200'));
-        
+
                 img.classList.add('border-red-500');
                 img.classList.remove('border-zinc-200');
-        
+
                 selectedAvatarInput.value = formatAvatarUrl(img.src);
             });
             avatars.appendChild(img);

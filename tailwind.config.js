@@ -6,7 +6,9 @@ module.exports = {
     'text-red-500',
     'border-red-500',
     'border-zinc-200',
-    'border-4'
+    'border-4',
+    'from-white',
+    'to-zinc-200'
   ],
   theme: {
     extend: {},

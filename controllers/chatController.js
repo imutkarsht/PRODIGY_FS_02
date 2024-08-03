@@ -46,8 +46,8 @@ const handlePostChats = async (req, res) => {
         return res.redirect('/?message=Username%20already%20taken%20-f');
     }
 
-    if (username.length < 4 || /[^a-zA-Z0-9_$]/.test(username)) {
-        return res.redirect('/?message=Username%20should%20be%20at%20least%20four%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)%20-f');
+    if (username.length < 3 || /[^a-zA-Z0-9_$]/.test(username) || username.length > 10) {
+        return res.redirect('/?message=Username%20should%20be%20in%20range%20(3-10)%20letters%20and%20alphanumeric%20only%20(underscores%20and%20dollar%20signs%20are%20allowed)%20-f');
     }
 
     try {
@@ -83,10 +83,10 @@ const handleLeaveRoom = async (req, res) => {
             }
 
             res.cookie('cookieData', '', { expires: new Date(0), httpOnly: true });
-            res.redirect('/?message=you%20left%20the%20room');
+            res.redirect('/?message=you%20left%20the%20room%20-s');
         } catch (error) {
             console.error('Error handling leave room:', error);
-            res.redirect('/?message=something%20went%20wrong');
+            res.redirect('/?message=something%20went%20wrong%20-f');
         }
     } else {
         res.redirect('/');
