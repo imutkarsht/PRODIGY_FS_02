@@ -1,6 +1,5 @@
 const Message = require('../models/messageModel');
 const ActiveUsers = require('../models/activeUsersModel');
-const ChatRoom = require('../models/chatRoomModel');
 const feedback = require('../models/feedbackModel')
 
 const handleGetHome = (req, res) => {
@@ -19,6 +18,7 @@ const handleGetChat = async (req, res) => {
     const username = cookieData.username;
     const cookieRoom = cookieData.room;
     const room = req.params.room;
+    if(Object.keys(cookieData).length === 0) return res.redirect('/?message=join%20chat%20first%20-f')
     if(cookieRoom !== room) return res.redirect(`/chat/${cookieRoom}?message=leave%20this%20room%to%20join%20other`)
     if (!username) {
         res.redirect('/?message=Please%20Join%20with%20username%20first%20-f');
@@ -79,7 +79,6 @@ const handleLeaveRoom = async (req, res) => {
 
             if (user) {
                 await ActiveUsers.deleteOne({ username });
-                await ChatRoom.deleteMany({ createdBy: user._id });
             }
 
             res.cookie('cookieData', '', { expires: new Date(0), httpOnly: true });
@@ -89,7 +88,7 @@ const handleLeaveRoom = async (req, res) => {
             res.redirect('/?message=something%20went%20wrong%20-f');
         }
     } else {
-        res.redirect('/');
+        res.redirect('/?message=no%20log%20in%20data%20found%20-f');
     }
 };
 
