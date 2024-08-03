@@ -57,8 +57,8 @@
                                 </div>
                             <% } %>
                             <div class="flex flex-col">
-                                <div class="p-3 px-0 py-1 rounded-lg max-w-xs <%= message.sender === response[0] ? 'bg-gradient-to-b from-red-300 to-red-500 text-white' : 'bg-gradient-to-b from-white to-zinc-200 text-gray-900' %>">
-                                    <p class="message-body text-base px-2"><%= message.data %></p>
+                                <div class="p-3 px-0 py-1 rounded-lg max-w-[60vw] md:max-w-xs <%= message.sender === response[0] ? 'bg-gradient-to-b from-red-300 to-red-500 text-white' : 'bg-gradient-to-b from-white to-zinc-200 text-gray-900' %>">
+                                    <p class="message-body overflow-wrap break-words text-base px-2"><%= message.data %></p>
                                     <p class="text-[8px] md:text-[10px] flex w-full px-1 justify-end"><%= message.sentAt %></p>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                         </div>`
                         : ''}
                     <div class="flex flex-col">
-                        <div class="bg-gradient-to-b ${msg.from === userId ? 'from-red-300 to-red-500' : 'from-white to-zinc-200'} p-3 py-1 rounded-lg max-w-xs text-white">
+                        <div class="bg-gradient-to-b ${msg.from === userId ? 'from-red-300 to-red-500' : 'from-white to-zinc-200'} p-3 py-1 rounded-lg max-w-[60vw] md:max-w-xs overflow-wrap break-words  text-white">
                             <p class="message-body text-base">${msg.message}</p>
                             <p class="text-[8px] md:text-[10px] ${msg.from === userId ? 'text-white' : 'text-zinc-800'} flex w-full justify-end">${msg.sentAt}</p>
                         </div>
