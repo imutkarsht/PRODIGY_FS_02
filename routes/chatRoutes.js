@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Feedback = require('../models/feedbackModel')
 const 
 { 
     handleGetHome,
@@ -10,6 +11,7 @@ const
     handlePostReview
 } 
 = require('../controllers/chatController');
+const feedback = require('../models/feedbackModel');
 
 router.get('/', handleGetHome);
 
@@ -23,6 +25,11 @@ router.get('/feedback', handleGetFeedbackPage)
 
 router.post('/feedback', handlePostReview)
 
-router.get('/about', (req, res)=> res.render('about'))
+router.get('/about', async (req, res)=> {
+    const feedbacks = await Feedback.find({approved: true})
+    if(!feedbacks) return res.redirect('/?message=fail%20to%20Fetch%20Feedbacks')
+    return res.render('about', {feedbacks: feedbacks})
+})
+
 
 module.exports = router;

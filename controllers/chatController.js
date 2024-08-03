@@ -105,7 +105,7 @@ const handlePostReview = async (req, res) => {
     }
 
     try {
-        const newReview = await new feedback({ name, email, review }).save();
+        const newReview = await new feedback({ name, email, review, approved: false }).save();
         if (!newReview) {
             return res.redirect('/feedback?message=fail%20to%20send%20review%20-f');
         }

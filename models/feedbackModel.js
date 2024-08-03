@@ -14,6 +14,13 @@ const feedbackSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    approved: {
+        type: Boolean,
+        required: true
+    },
+    reviewAt:{
+        type:String
+    }
 },{timestamps: true})
 
 feedbackSchema.pre('save', function(next) {

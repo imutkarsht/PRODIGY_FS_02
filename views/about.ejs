@@ -24,7 +24,7 @@
     </nav>
     <div class="flex w-full flex-wrap-reverse items-center mt-[2vh] p-8 justify-between">
         <div class="md:w-1/2 w-full">
-            <div class="flex flex-col md:mt-[10vh] mt-0 md:p-8 p-2 pl-0">
+            <div class="flex flex-col md:mt-[10vh] mt-0 md:p-8 md:pb-2 p-2 pl-0">
                 <h2 class="md:text-4xl text-2xl mb-[2vh] font-bold text-zinc-950">Welcome to Chatify!</h2>
                 <p class="md:text-lg text-base md:pr-20 pr-0 font-semibold text-zinc-600">
                     Chatify is a real-time chat application built by <a href="https://github.com/imutkarsht" class="text-red-500">Utkarsh Tiwari</a> as capstone project. The application allow users to get engage in anonymous, instant room based communication. 
@@ -57,7 +57,26 @@
             <img src="/images/chatting.png" alt="banner">
         </div>
     </div>
+    <div class="md:p-12 md:py-0 p-4 py-0">
+        <button class="md:text-base bg-red-500 flex items-center rounded-md hover:bg-red-400 transition duration-200 ease-in-out px-4 py-2 text-base mt-2 mb-2 font-bold text-white" id="feedbackBtn">See Feedbacks</button>
+        <div class="hidden flex-wrap gap-4 pb-4 items-center" id="feedbackBox">
+            <% feedbacks.forEach(feedback => { %>     
+                <div class="flex gap-2 items-start md:min-h-[22vh] min-h-[15vh] overflow-hidden bg-zinc-100 md:w-[20vw] w-full rounded-md p-3 shadow-md shadow-zinc-400">
+                    <img src="/images/avatars/avatar<%= Math.floor(Math.random()*12) %>.jpg" class="h-10  rounded-full" alt="avatar">
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between md:w-[15vw] w-[75vw] items-center">
+                            <h3 class="text-lg font-semibold text-zinc-950"><%= feedback.name %></h3>
+                            <p class="text-[10px] font-semibold text-zinc-500 self-end"><%= feedback.reviewAt %></p>
+                        </div>
+                        <div class="h-[0.4vh] bg-red-500 font-light text-xs text-zinc-700 w-full"></div>
+                        <p><%= feedback.review %></p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
     
     <script src="/scripts/nav.js"></script>
+    <script src="/scripts/toggleFeedback.js"></script>
 </body>
 </html>
